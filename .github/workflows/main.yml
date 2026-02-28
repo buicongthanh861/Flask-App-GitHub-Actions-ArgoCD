@@ -54,7 +54,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add demo-app.yaml
+          git add deploy/deploy.yaml
           git diff --cached --quiet || git commit -m "Update demo-app image to ${{ github.sha }} [skip ci]"
           git push
      
