@@ -48,7 +48,7 @@ jobs:
       # update image tag in deployment file
       - name: Update deployment file
         run: |
-          sed -i 's|image: congthanh19/demo-app:.*|image: congthanh19/demo-app:${{ github.sha }}|' demo-app.yaml
+          sed -i 's|image: congthanh19/demo-app:.*|image: congthanh19/demo-app:${{ github.sha }}|' deploy/demo-app.yaml
       # commit and push changes to deployment file
       - name: Commit and push changes
         run: |
