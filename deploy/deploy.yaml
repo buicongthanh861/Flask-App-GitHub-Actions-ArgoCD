@@ -9,6 +9,7 @@ metadata:
     argocd-image-updater.argoproj.io/demo.update-strategy: newest-build
     argocd-image-updater.argoproj.io/demo.allow-tags: regexp:^[a-f0-9]{40}$
     argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: master
 spec:
   replicas: 1
   selector:
@@ -23,12 +24,16 @@ spec:
       containers:
         - name: demo-app
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
 =======
           image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
 >>>>>>> c52f9ef3c843d1c9d281ae2c1e1c808800a238e2
+=======
+          image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
+>>>>>>> 148e9ee (update file main flow gitops 6)
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
           resources: {}
-status: {}
+
