@@ -1,23 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app-deployment
+  labels:
+    app: demo-app
+  name: demo-app
   annotations:
     argocd-image-updater.argoproj.io/image-list: demo=congthanh19/demo-app
     argocd-image-updater.argoproj.io/demo.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/demo.allow-tags: regexp:^[a-f0-9]{40}$
     argocd-image-updater.argoproj.io/write-back-method: git
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: demo-app
+  strategy: {}
   template:
     metadata:
       labels:
         app: demo-app
     spec:
       containers:
-      - name: demo-app
-        image: congthanh19/demo-app
-        ports:
-        - containerPort: 5000
+        - name: demo-app
+          image: congthanh19/demo-app:gitops
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          resources: {}
+status: {}
