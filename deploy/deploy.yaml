@@ -25,12 +25,12 @@ spec:
         - name: demo-app
 <<<<<<< HEAD
 <<<<<<< HEAD
-          image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
+          image: congthanh19/demo-app:f50615069da9106a074c1e90a98b08caeedfda5b
 =======
-          image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
+          image: congthanh19/demo-app:f50615069da9106a074c1e90a98b08caeedfda5b
 >>>>>>> c52f9ef3c843d1c9d281ae2c1e1c808800a238e2
 =======
-          image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
+          image: congthanh19/demo-app:f50615069da9106a074c1e90a98b08caeedfda5b
 >>>>>>> 148e9ee (update file main flow gitops 6)
           imagePullPolicy: Always
           ports:
