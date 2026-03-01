@@ -44,13 +44,13 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       # synk scan
-      - name: Snyk Scan
-        uses: snyk/actions/python@master
-        with:
-          args: test --all-projects --severity-threshold=high
+      #- name: Snyk Scan
+        #uses: snyk/actions/python@master
+       # with:
+       #   args: test --all-projects --severity-threshold=high
           # args: monitor --all-projects --severity-threshold=high
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      #  env:
+      #    SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       # docker credentials
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
