@@ -45,7 +45,7 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       # synk scan
       - name: Snyk Scan
-        uses: snyk/actions/pyhon@master
+        uses: snyk/actions/python@master
         with:
           args: test --all-projects --severity-threshold=high
           # args: monitor --all-projects --severity-threshold=high
