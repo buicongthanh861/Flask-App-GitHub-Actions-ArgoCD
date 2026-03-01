@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: congthanh19/demo-app:gitops
+          image: congthanh19/demo-app:5243a9483792a6f524dc72fcd08d7a29fc4a9ef9
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
