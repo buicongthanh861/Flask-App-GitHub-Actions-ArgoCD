@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: congthanh19/demo-app:f3698d60b264cf8756a067a9e561c9022ee8d56c
+          image: congthanh19/demo-app:884ba7ec2c475e4c51bbc8c3170347d147fe6199
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
