@@ -34,6 +34,23 @@ jobs:
       - name: Run tests
         run: |
           flake8 --ignore=E501,F401 .
+      # sonarcloud scan
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=buicongthanh861_Flask-App-GitHub-Actions-ArgoCD
+            -Dsonar.organization=java-woof
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      # synk scan
+      - name: Snyk Scan
+        uses: snyk/actions/pyhon@master
+        with:
+          args: test --all-projects --severity-threshold=high
+          # args: monitor --all-projects --severity-threshold=high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       # docker credentials
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
