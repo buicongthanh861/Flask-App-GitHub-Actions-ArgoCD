@@ -1,18 +1,18 @@
-name: test and build 
+name: Production-Grade CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
     paths:
       - '**/*'
+      - '!.github/workflows/**'
+
 permissions:
   contents: write
 
 jobs:
-  build:
+  quality-check:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,58 +20,75 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.8
-
-      - name: Docker setup
-        uses: docker/setup-buildx-action@v3
+          python-version: 3.9
+          cache: 'pip'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install flake8 
-      # test code
-      - name: Run tests
-        run: |
-          flake8 --ignore=E501,F401 .
-      # sonarcloud scan
+
+      - name: Run Linting
+        run: flake8 --ignore=E501,F401 .
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
             -Dsonar.projectKey=buicongthanh861_Flask-App-GitHub-Actions-ArgoCD
             -Dsonar.organization=java-woof
             -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-      # synk scan
-      #- name: Snyk Scan
-        #uses: snyk/actions/python@master
-       # with:
-       #   args: test --all-projects --severity-threshold=high
-          # args: monitor --all-projects --severity-threshold=high
-      #  env:
-      #    SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      # docker credentials
+
+  build-and-push:
+    needs: quality-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      # docker tag and push
-      - name: Docker build image
-        run: docker build -t congthanh19/demo-app:${{github.sha}} .
-      - name: Docker push
-        run: docker push congthanh19/demo-app:${{github.sha}}
-      # update image tag in deployment file
-      - name: Update deployment file
-        run: |
-          sed -i 's|image: congthanh19/demo-app:.*|image: congthanh19/demo-app:${{ github.sha }}|' deploy/deploy.yaml
-      # commit and push changes to deployment file
-      - name: Commit and push changes
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add deploy/deploy.yaml
-          git diff --cached --quiet || git commit -m "Update demo-app image to ${{ github.sha }} [skip ci]"
-          git push
-     
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            congthanh19/demo-app:${{ github.sha }}
+            congthanh19/demo-app:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+    update-gitops:
+      needs: build-and-push
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout GitOps repository
+          uses: actions/checkout@v4
+          
+        - name: Setup Kustomize
+          uses: imranismail/setup-kustomize@v2
+
+        - name: Update image tag in Kustomize
+          run: | 
+            cd deploy
+            kustomize edit set image demo-app=congthanh19/demo-app:${{ github.sha }}
+
+        - name: Commit and push changes
+          run: |
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            # Skip CI để tránh lặp vô tận khi bot commit lên chính repo này
+            git diff --staged --quiet || (git commit -m "chore: update image to ${{ github.sha }} [skip ci]" && git push)
