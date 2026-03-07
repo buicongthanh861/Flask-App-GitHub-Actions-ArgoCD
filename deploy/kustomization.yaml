@@ -7,4 +7,4 @@ resources:
   - service.yaml
 images:
   - name: congthanh19/demo-app
-    newTag: latest
+    newTag: 5243a9483792a6f524dc72fcd08d7a29fc4a9ef9
