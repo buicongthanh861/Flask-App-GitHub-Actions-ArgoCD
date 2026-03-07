@@ -3,8 +3,11 @@ kind: Kustomization
 
 # Khai báo tất cả các file manifest bạn muốn triển khai
 resources:
-  - deployment.yaml
-  - service.yaml
+- deployment.yaml
+- service.yaml
 images:
-  - name: congthanh19/demo-app
-    newTag: 5243a9483792a6f524dc72fcd08d7a29fc4a9ef9
+- name: congthanh19/demo-app
+  newTag: 5243a9483792a6f524dc72fcd08d7a29fc4a9ef9
+- name: demo-app
+  newName: congthanh19/demo-app
+  newTag: c24dc9dd660232985b953850eefc21267bb5329d
