@@ -70,25 +70,25 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-    update-gitops:
+  update-gitops:
       needs: build-and-push
       runs-on: ubuntu-latest
       steps:
-        - name: Checkout GitOps repository
-          uses: actions/checkout@v4
+      - name: Checkout GitOps repository
+        uses: actions/checkout@v4
           
-        - name: Setup Kustomize
-          uses: imranismail/setup-kustomize@v2
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v2
 
-        - name: Update image tag in Kustomize
-          run: | 
-            cd deploy
-            kustomize edit set image demo-app=congthanh19/demo-app:${{ github.sha }}
+      - name: Update image tag in Kustomize
+        run: | 
+          cd deploy
+          kustomize edit set image demo-app=congthanh19/demo-app:${{ github.sha }}
 
-        - name: Commit and push changes
-          run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add .
-            # Skip CI để tránh lặp vô tận khi bot commit lên chính repo này
-            git diff --staged --quiet || (git commit -m "chore: update image to ${{ github.sha }} [skip ci]" && git push)
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          # Skip CI để tránh lặp vô tận khi bot commit lên chính repo này
+          git diff --staged --quiet || (git commit -m "chore: update image to ${{ github.sha }} [skip ci]" && git push)
