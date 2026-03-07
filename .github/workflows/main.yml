@@ -81,7 +81,7 @@ jobs:
       - name: Update image tag in Kustomize
         run: | 
           cd deploy
-          kustomize edit set image demo-app=congthanh19/demo-app:${{ github.sha }}
+          kustomize edit set image congthanh19/demo-app=congthanh19/demo-app:${{ github.sha }}
 
       - name: Commit and push changes
         run: |
