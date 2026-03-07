@@ -6,6 +6,6 @@ resources:
 - deployment.yaml
 - service.yaml
 images:
-  - name: congthanh19/demo-app
-    newTag: latest
-
+- name: congthanh19/demo-app
+  newName: congthanh19/demo-app
+  newTag: 6d96aabbfc4e3356ae77661c4dcfee71513cd9c5
