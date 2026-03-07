@@ -3,9 +3,7 @@ name: Production-Grade CI/CD Pipeline
 on:
   push:
     branches: [ master ]
-    paths:
-      - '**/*'
-      - '!.github/workflows/**'
+
 
 permissions:
   contents: write
